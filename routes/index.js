@@ -1,5 +1,5 @@
-const publicRoutes = require("./publicRoutes");
+const apiRoutes = require("./apiRoutes");
 
 module.exports = (app) => {
-  app.use(publicRoutes);
+  app.use("/api", apiRoutes);
 };
