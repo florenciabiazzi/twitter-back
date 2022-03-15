@@ -1,12 +1,13 @@
 const express = require("express");
 const tokenController = require("../controllers/tokenController");
 const apiRouter = express.Router();
+const tweetController = require("../controllers/tweetController");
 
 //Crea un tweet--create
-apiRouter.post("/tweets");
+apiRouter.post("/tweets", tweetController.create);
 
 // Borra un tweet en específico--destroy
-apiRouter.delete("/tweets/:id");
+apiRouter.delete("/tweets/:id", tweetController.destroy);
 
 // Da like a un tweet en específico--like
 apiRouter.post("/tweets/:id");
