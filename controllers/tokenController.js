@@ -16,7 +16,7 @@ async function login(req, res) {
     return res.status(401).json({ error: "Credenciales incorrectas" });
   }
 
-  const token = jwt.sign({ sub: user.id }, process.env.ACCESS_TOKEN);
+  const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN);
   return res.json({ user, token });
 }
 
