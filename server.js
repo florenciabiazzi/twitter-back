@@ -13,6 +13,7 @@ mongoose.connection
   .on("error", (error) => console.log(error));
 
 app.use(express.static("public"));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 const methodOverride = require("method-override");
