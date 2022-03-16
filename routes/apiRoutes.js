@@ -35,7 +35,7 @@ apiRouter.delete("/tweets/like/:id", tweetController.dislike);
 apiRouter.get("/tweets/:username", tweetController.show);
 
 //Trae toda la informacion de un usuario.--show
-apiRouter.get("/users/:username");
+apiRouter.get("/users/:username", userController.getUser);
 
 //Trae los usuarios que sigue un usuario--showFollowing
 apiRouter.get("/users/:username/following");

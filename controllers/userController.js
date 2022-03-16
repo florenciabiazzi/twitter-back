@@ -31,7 +31,13 @@ async function store(req, res) {
 }
 
 // Display the specified resource.
-async function show(req, res) {}
+async function getUser(req, res) {
+  const user = await User.findOne({ username: req.params.username });
+  if (!user) res.status(404).json("No existe el usuario");
+  else {
+    res.json(user);
+  }
+}
 
 // Show the form for creating a new resource
 async function create(req, res) {}
@@ -150,7 +156,7 @@ async function showFollowers(req, res) {
   return res.json({ aux, myFollowers });
 }
 module.exports = {
-  show,
+  getUser,
   create,
   store,
   edit,
