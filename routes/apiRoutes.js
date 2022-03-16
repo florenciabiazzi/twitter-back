@@ -2,7 +2,22 @@ const express = require("express");
 const tokenController = require("../controllers/tokenController");
 const apiRouter = express.Router();
 const tweetController = require("../controllers/tweetController");
+const checkJwt = require("express-jwt");
 
+require("dotenv").config();
+
+//Genera un nuevo token--createToken
+apiRouter.post("/token", tokenController.login);
+
+//Crea un nuevo usuario--create
+apiRouter.post("/users");
+
+apiRouter.use(
+  checkJwt({
+    secret: process.env.ACCESS_TOKEN,
+    algorithms: ["HS256"],
+  }),
+);
 //Crea un tweet--create
 apiRouter.post("/tweets", tweetController.create);
 
@@ -16,13 +31,7 @@ apiRouter.post("/tweets/:id");
 apiRouter.delete("/tweets/:id");
 
 //Trae los tweets de un usuario especifico--show
-apiRouter.get("/tweets/:username");
-
-//Genera un nuevo token--createToken
-apiRouter.post("/token", tokenController.login);
-
-//Crea un nuevo usuario--create
-apiRouter.post("/users");
+apiRouter.get("/tweets/:username", tweetController.show);
 
 //Trae toda la informacion de un usuario.--show
 apiRouter.get("/users/:username");
