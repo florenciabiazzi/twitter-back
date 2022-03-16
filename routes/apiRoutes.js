@@ -38,7 +38,7 @@ apiRouter.post("/tweets/like/:id", tweetController.like);
 apiRouter.delete("/tweets/like/:id", tweetController.dislike);
 
 //Trae los usuarios que sigue un usuario--showFollowing
-apiRouter.get("/following", userController.showFollowing); //real path:/users/:username/following
+apiRouter.get("/users/:username/following", userController.showFollowing);
 
 //Agrega un usuario a la lista de seguidos. El id corresponde al usuario que quiero seguir --follow
 apiRouter.post("/users/follow/:id", userController.follow);
@@ -47,6 +47,6 @@ apiRouter.post("/users/follow/:id", userController.follow);
 apiRouter.delete("/users/follow/:id", userController.unfollow);
 
 //Trae los usuarios que sigue un usuario--showFollowers
-apiRouter.get("/followers", userController.showFollowers); //real path:/users/:username/followers
+apiRouter.get("/users/:username/followers", userController.showFollowers);
 
 module.exports = apiRouter;
