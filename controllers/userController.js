@@ -1,16 +1,40 @@
 const User = require("../models/User");
 
-// Display a listing of the resource.
-async function index(req, res) {}
+// Save a new user
+async function store(req, res) {
+  const newUser = new User({
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password,
+    profileImage: "../img/unknown.jpg",
+  });
+  try {
+    const newUserMail = await User.findOne({ email: newUser.email });
+    const newUserUsername = await User.findOne({ username: newUser.username });
+
+    if (newUserMail) {
+      res.status(401).json("This email is already in use.");
+      console.log("This email is already in use.");
+    } else if (newUserUsername) {
+      res.status(401).json("This username is already in use.");
+      console.log("This username is already in use.");
+    } else {
+      const savedUser = await newUser.save();
+      console.log(`${savedUser} is saved!`);
+      res.json(savedUser);
+    }
+  } catch (err) {
+    res.status(404); //revisar y cambiar status
+  }
+}
 
 // Display the specified resource.
 async function show(req, res) {}
 
 // Show the form for creating a new resource
 async function create(req, res) {}
-
-// Store a newly created resource in storage.
-async function store(req, res) {}
 
 // Show the form for editing the specified resource.
 async function edit(req, res) {}
@@ -126,7 +150,6 @@ async function showFollowers(req, res) {
   return res.json({ aux, myFollowers });
 }
 module.exports = {
-  index,
   show,
   create,
   store,

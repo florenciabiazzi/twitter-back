@@ -2,6 +2,7 @@ const express = require("express");
 const tokenController = require("../controllers/tokenController");
 const apiRouter = express.Router();
 const tweetController = require("../controllers/tweetController");
+const userController = require("../controllers/userController");
 const checkJwt = require("express-jwt");
 
 require("dotenv").config();
@@ -9,8 +10,8 @@ require("dotenv").config();
 //Genera un nuevo token--createToken
 apiRouter.post("/token", tokenController.login);
 
-//Crea un nuevo usuario--create
-apiRouter.post("/users");
+//Crea un nuevo usuario--store
+apiRouter.post("/users", userController.store);
 
 apiRouter.use(
   checkJwt({
