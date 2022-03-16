@@ -21,6 +21,7 @@ module.exports = async () => {
     });
     users.push(user);
   }
+
   await User.create(users);
 
   const usersToUpdate = await User.find();
