@@ -13,6 +13,12 @@ apiRouter.post("/token", tokenController.login);
 //Crea un nuevo usuario--store
 apiRouter.post("/users", userController.store);
 
+//Trae los tweets de un usuario especifico--show
+apiRouter.get("/tweets/:username", tweetController.show);
+
+//Trae toda la informacion de un usuario.--show
+apiRouter.get("/users/:username", userController.getUser);
+
 apiRouter.use(
   checkJwt({
     secret: process.env.ACCESS_TOKEN,
@@ -30,12 +36,6 @@ apiRouter.post("/tweets/like/:id", tweetController.like);
 
 // Da dislike a un tweet en específico--dislike
 apiRouter.delete("/tweets/like/:id", tweetController.dislike);
-
-//Trae los tweets de un usuario especifico--show
-apiRouter.get("/tweets/:username", tweetController.show);
-
-//Trae toda la informacion de un usuario.--show
-apiRouter.get("/users/:username", userController.getUser);
 
 //Trae los usuarios que sigue un usuario--showFollowing
 apiRouter.get("/users/:username/following");
