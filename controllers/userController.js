@@ -54,40 +54,35 @@ async function destroy(req, res) {}
 // Otros handlers...............................
 
 async function showFollowing(req, res) {
-  const followeds = [];
-  const aux = [];
-  const data = await User.findById(req.params.id);
-  data.following.map((userId) => followeds.push(userId));
-  const users = await User.find();
-  for (let i of followeds) {
-    for (let user of users) {
-      if (user.id == i) {
-        //se murio un gato aca!!!
-        aux.push(user);
-      }
+  const myUser = await User.findById(req.user.id);
+  const allUsers = await User.find();
+  const followed = [];
+  allUsers.filter((d) => {
+    if (myUser.following.includes(d.id)) {
+      return followed.push(d);
     }
-  }
-  return res.json({ aux, followeds });
+  });
+  return res.json(followed);
 }
 
 async function follow(req, res) {
-  const myId = req.params.id;
+  const userId = req.user.id;
   const idToFollow = req.body.id;
-  if (myId === idToFollow) {
-    return res.send("eres tu");
+  if (user === idToFollow) {
+    return res.json("es tu cuenta");
   }
-  const myUser = await User.findById(myId);
-  const dataToFollow = await User.findById(idToFollow);
-  if (idToFollow in myUser.following) {
-    return res.send("ya lo sigues");
-  } else if (myId in dataToFollow.followers) {
-    return res.send("ya lo sigues, hay una incongruencia!");
+  const user = await User.findById(userId);
+  const userToFollow = await User.findById(idToFollow);
+  if (user.following.includes(idToFollow)) {
+    return res.json("ya lo sigues");
+  } else if (userToFollow.followers.includes(user)) {
+    return res.json("ya lo sigues, hay una incongruencia!");
   } else {
-    myUser.following.push(idToFollow);
-    dataToFollow.followers.push(myId);
+    await User.findByIdAndUpdate(userId, { $push: { following: idToFollow } });
+    await User.findByIdAndUpdate(idToFollow, { $push: { following: userId } });
   }
 
-  return res.json({ myUser, dataToFollow });
+  return res.json({ user, userToFollow });
 }
 
 async function unfollow(req, res) {
@@ -140,20 +135,15 @@ async function unfollow(req, res) {
 }
 
 async function showFollowers(req, res) {
-  const myFollowers = [];
-  const aux = [];
-  const data = await User.findById(req.params.id);
-  data.following.map((userId) => myFollowers.push(userId));
-  const users = await User.find();
-  for (let i of myFollowers) {
-    for (let user of users) {
-      if (user.id == i) {
-        //huele a gato muerto!!!
-        aux.push(user);
-      }
+  const myUser = await User.findById(req.user.id);
+  const allUsers = await User.find();
+  const followers = [];
+  allUsers.filter((d) => {
+    if (myUser.followers.includes(d.id)) {
+      return followers.push(d);
     }
-  }
-  return res.json({ aux, myFollowers });
+  });
+  return res.json(followers);
 }
 module.exports = {
   getUser,

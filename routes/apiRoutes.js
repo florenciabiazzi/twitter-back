@@ -4,6 +4,7 @@ const apiRouter = express.Router();
 const tweetController = require("../controllers/tweetController");
 const userController = require("../controllers/userController");
 const checkJwt = require("express-jwt");
+const userController = require("../controllers/userController");
 
 require("dotenv").config();
 
@@ -38,15 +39,15 @@ apiRouter.post("/tweets/like/:id", tweetController.like);
 apiRouter.delete("/tweets/like/:id", tweetController.dislike);
 
 //Trae los usuarios que sigue un usuario--showFollowing
-apiRouter.get("/users/:username/following");
+apiRouter.get("/following", userController.showFollowing); //real path:/users/:username/following
 
 //Agrega un usuario a la lista de seguidos. El id corresponde al usuario que quiero seguir --follow
-apiRouter.post("/users/follow/:id");
+apiRouter.post("/add", userController.follow); //real path:/users/follow/:id
 
 //Elimina un usuario de la lista de seguidos. El id corresponde al usuario que quiero dejar de seguir --unfollow
-apiRouter.delete("/users/follow/:id");
+apiRouter.delete("/remove/:id", userController.unfollow); //real path:/users/follow/:id
 
 //Trae los usuarios que sigue un usuario--showFollowers
-apiRouter.get("/users/:username/followers");
+apiRouter.get("/followers", userController.showFollowers); //real path:/users/:username/followers
 
 module.exports = apiRouter;
