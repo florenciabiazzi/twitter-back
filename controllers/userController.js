@@ -66,72 +66,35 @@ async function showFollowing(req, res) {
 }
 
 async function follow(req, res) {
-  const userId = req.user.id;
-  const idToFollow = req.body.id;
-  if (user === idToFollow) {
-    return res.json("es tu cuenta");
-  }
-  const user = await User.findById(userId);
-  const userToFollow = await User.findById(idToFollow);
-  if (user.following.includes(idToFollow)) {
+  const myUser = await User.findById(req.user.id);
+
+  const userToFollow = await User.findById(req.params.id);
+
+  if (myUser.following.includes(req.params.id)) {
     return res.json("ya lo sigues");
-  } else if (userToFollow.followers.includes(user)) {
+  } else if (userToFollow.followers.includes(req.user.id)) {
     return res.json("ya lo sigues, hay una incongruencia!");
   } else {
-    await User.findByIdAndUpdate(userId, { $push: { following: idToFollow } });
-    await User.findByIdAndUpdate(idToFollow, { $push: { following: userId } });
+    await User.findByIdAndUpdate(req.user.id, { $push: { following: req.params.id } });
+    await User.findByIdAndUpdate(req.params.id, { $push: { followers: req.user.id } });
+    console.log(req.user.id);
+    return res.json(userToFollow);
   }
-
-  return res.json({ user, userToFollow });
 }
 
 async function unfollow(req, res) {
-  const myId = req.params.id;
-  const idToFollow = req.body.id;
-  if (myId === idToFollow) {
-    return res.send("eres tu");
-  }
-  const myUser = await User.findById(myId);
-  const dataToFollow = await User.findById(idToFollow);
-  /*if (idToFollow in myUser.following) {
-    myUser.following = myUser.following.filter((d) => d !== idToFollow);
-  }
-  if (myId in dataToFollow.followers) {
-    dataToFollow.following = dataToFollow.followers.filter((d) => d !== myId);
-  }
- */
-  User.findByIdAndUpdate(
-    myId,
-    {
-      following: myUser.following.filter((d) => {
-        d !== idToFollow;
-      }),
-    },
-    function (err, docs) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Updated User : ", docs);
-      }
-    },
-  );
-  User.findByIdAndUpdate(
-    idToFollow,
-    {
-      following: dataToFollow.followers.filter((d) => {
-        d != myId;
-      }),
-    },
-    function (err, docs) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Updated User : ", docs);
-      }
-    },
-  );
+  const myUser = await User.findById(req.user.id);
 
-  return res.json({ myUser, dataToFollow });
+  const userToFollow = await User.findById(req.params.id);
+
+  if (myUser.following.includes(req.params.id)) {
+    await User.findByIdAndUpdate(req.user.id, { $pull: { following: req.params.id } });
+    await User.findByIdAndUpdate(req.params.id, { $pull: { followers: req.user.id } });
+    console.log(req.user.id);
+    return res.json(userToFollow);
+  } else {
+    return res.json("no lo sigues");
+  }
 }
 
 async function showFollowers(req, res) {
