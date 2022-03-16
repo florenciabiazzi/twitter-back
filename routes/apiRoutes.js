@@ -19,16 +19,16 @@ apiRouter.use(
   }),
 );
 //Crea un tweet--create
-apiRouter.post("/tweets", tweetController.create);
+apiRouter.post("/tweets", tweetController.store);
 
 // Borra un tweet en específico--destroy
 apiRouter.delete("/tweets/:id", tweetController.destroy);
 
 // Da like a un tweet en específico--like
-apiRouter.post("/tweets/:id");
+apiRouter.post("/tweets/like/:id", tweetController.like);
 
 // Da dislike a un tweet en específico--dislike
-apiRouter.delete("/tweets/:id");
+apiRouter.delete("/tweets/like/:id", tweetController.dislike);
 
 //Trae los tweets de un usuario especifico--show
 apiRouter.get("/tweets/:username", tweetController.show);
