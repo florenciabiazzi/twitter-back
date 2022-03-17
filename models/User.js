@@ -17,12 +17,15 @@ const userSchema = new Schema({
 });
 
 userSchema.pre("save", async function (next) {
-  const user = this;
-  user.password = await bcrypt.hash(user.password, Number(process.env.HASH_ROUNDS));
+  if (this.isModified("password") || this.isNew) {
+    this.password = await bcrypt.hash(this.password, 10); // Ojo que el 10 está hardcodeado.
+  }
   next();
 });
 
 userSchema.methods.comparePassword = async function (candidatePassword) {
+  console.log(this.password);
+  console.log(await bcrypt.hash(candidatePassword, 10));
   return await bcrypt.compare(candidatePassword, this.password);
 };
 

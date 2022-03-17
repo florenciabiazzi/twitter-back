@@ -20,7 +20,6 @@ async function store(req, res) {
       res.status(401).json("This username is already in use.");
     } else {
       const savedUser = await newUser.save();
-
       res.json(savedUser);
     }
   } catch (err) {
@@ -36,20 +35,6 @@ async function getUser(req, res) {
     res.json(user);
   }
 }
-
-// Show the form for creating a new resource
-async function create(req, res) {}
-
-// Show the form for editing the specified resource.
-async function edit(req, res) {}
-
-// Update the specified resource in storage.
-async function update(req, res) {}
-
-// Remove the specified resource from storage.
-async function destroy(req, res) {}
-
-// Otros handlers...............................
 
 async function showFollowing(req, res) {
   const myUser = await User.findById(req.user.id);
@@ -108,11 +93,7 @@ async function showFollowers(req, res) {
 }
 module.exports = {
   getUser,
-  create,
   store,
-  edit,
-  update,
-  destroy,
   showFollowing,
   follow,
   unfollow,
