@@ -53,7 +53,7 @@ async function getTweetsOfFollowing(req, res) {
   const user = await User.findById(req.params.id);
   const tweets = await Tweet.find({ author: { $in: user.following } }).populate("author");
   console.log(user);
-  res.json({ user, tweets });
+  res.json({ tweets });
 }
 module.exports = {
   store,
