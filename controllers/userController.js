@@ -29,7 +29,7 @@ async function store(req, res) {
 
 // Display the specified resource.
 async function getUser(req, res) {
-  const user = await User.findOne({ username: req.params.username });
+  const user = await User.findById(req.params.id);
   if (!user) res.status(404).json("No existe el usuario");
   else {
     res.json(user);
@@ -59,7 +59,7 @@ async function getUsers(req, res) {
 }
 
 async function showFollowing(req, res) {
-  const myUser = await User.findById(req.user.id);
+  const myUser = await User.findById(req.params.id);
   const allUsers = await User.find();
   const followed = [];
   allUsers.filter((d) => {
@@ -103,7 +103,7 @@ async function unfollow(req, res) {
 }
 
 async function showFollowers(req, res) {
-  const myUser = await User.findById(req.user.id);
+  const myUser = await User.findById(req.params.id);
   const allUsers = await User.find();
   const followers = [];
   allUsers.filter((d) => {

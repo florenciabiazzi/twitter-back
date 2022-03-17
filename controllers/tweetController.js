@@ -1,5 +1,6 @@
 const Tweet = require("../models/Tweet");
 const User = require("../models/User");
+const { use } = require("../routes/apiRoutes");
 
 async function store(req, res) {
   const tweet = String(req.body.content);
@@ -44,15 +45,21 @@ async function dislike(req, res) {
 async function show(req, res) {
   const user = await User.findOne({ username: req.params.username });
   if (!user) return res.status(404).json("No existe el usuario");
-  const tweets = await Tweet.find({ author: user.id });
+  const tweets = await Tweet.find({ author: user.id }).populate("author");
   res.status(200).json({ tweets });
 }
 // ...
-
+async function getTweetsOfFollowing(req, res) {
+  const user = await User.findById(req.params.id);
+  const tweets = await Tweet.find({ author: { $in: user.following } }).populate("author");
+  console.log(user);
+  res.json({ user, tweets });
+}
 module.exports = {
   store,
   destroy,
   show,
   like,
   dislike,
+  getTweetsOfFollowing,
 };

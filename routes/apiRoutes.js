@@ -16,11 +16,11 @@ apiRouter.get("/users", userController.getUsers);
 //Crea un nuevo usuario--store
 apiRouter.post("/users", userController.store);
 
-//Trae los tweets de un usuario especifico--show
+//Trae los tweets de un usuario especifico--show HACER POPULATE PARE QUE TE TRAIGA EL USUARIO
 apiRouter.get("/tweets/:username", tweetController.show);
 
 //Trae toda la informacion de un usuario.--show
-apiRouter.get("/users/:username", userController.getUser);
+apiRouter.get("/users/:id", userController.getUser);
 
 apiRouter.use(
   checkJwt({
@@ -28,6 +28,10 @@ apiRouter.use(
     algorithms: ["HS256"],
   }),
 );
+
+// mOSTRAR LOS TWEETS DE LOS SEGUIDOS DE UN USUARIO
+apiRouter.get("/tweets/following/:id", tweetController.getTweetsOfFollowing);
+
 //Crea un tweet--create
 apiRouter.post("/tweets", tweetController.store);
 
@@ -41,7 +45,7 @@ apiRouter.post("/tweets/like/:id", tweetController.like);
 apiRouter.delete("/tweets/like/:id", tweetController.dislike);
 
 //Trae los usuarios que sigue un usuario--showFollowing
-apiRouter.get("/users/:username/following", userController.showFollowing);
+apiRouter.get("/users/:id/following", userController.showFollowing);
 
 //Agrega un usuario a la lista de seguidos. El id corresponde al usuario que quiero seguir --follow
 apiRouter.post("/users/follow/:id", userController.follow);
@@ -50,6 +54,6 @@ apiRouter.post("/users/follow/:id", userController.follow);
 apiRouter.delete("/users/follow/:id", userController.unfollow);
 
 //Trae los usuarios que sigue un usuario--showFollowers
-apiRouter.get("/users/:username/followers", userController.showFollowers);
+apiRouter.get("/users/:id/followers", userController.showFollowers);
 
 module.exports = apiRouter;
