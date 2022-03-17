@@ -20,7 +20,7 @@ apiRouter.post("/users", userController.store);
 apiRouter.get("/tweets/:username", tweetController.show);
 
 //Trae toda la informacion de un usuario.--show
-apiRouter.get("/users/:id", userController.getUser);
+apiRouter.get("/users/:username", userController.getUser);
 
 apiRouter.use(
   checkJwt({
