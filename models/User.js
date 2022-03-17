@@ -26,9 +26,12 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-const User = mongoose.model("User", userSchema);
+userSchema.methods.toJSON = function () {
+  const user = this.toObject();
+  delete user.password;
+  return user;
+};
 
-//Solo hashea la password si fué modificada🔰
-// if (!user.isModified("password")) return next();
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
