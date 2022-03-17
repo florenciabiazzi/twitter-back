@@ -16,13 +16,10 @@ async function store(req, res) {
 
     if (newUserMail) {
       res.status(401).json("This email is already in use.");
-      console.log("This email is already in use.");
     } else if (newUserUsername) {
       res.status(401).json("This username is already in use.");
-      console.log("This username is already in use.");
     } else {
       const savedUser = await newUser.save();
-      console.log(`${savedUser} is saved!`);
       res.json(savedUser);
     }
   } catch (err) {
@@ -118,11 +115,7 @@ async function showFollowers(req, res) {
 }
 module.exports = {
   getUser,
-  create,
   store,
-  edit,
-  update,
-  destroy,
   showFollowing,
   follow,
   unfollow,
