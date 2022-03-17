@@ -10,6 +10,9 @@ require("dotenv").config();
 //Genera un nuevo token--createToken
 apiRouter.post("/token", tokenController.login);
 
+//Llamar a todos los usuarios.
+apiRouter.get("/users", userController.getUsers);
+
 //Crea un nuevo usuario--store
 apiRouter.post("/users", userController.store);
 

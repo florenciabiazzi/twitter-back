@@ -52,6 +52,14 @@ async function update(req, res) {}
 async function destroy(req, res) {}
 
 // Otros handlers...............................
+async function getUsers(req, res) {
+  const users = await User.find();
+  if (users) {
+    return res.json(users);
+  } else {
+    return res.status(404).json("Users not found");
+  }
+}
 
 async function showFollowing(req, res) {
   const myUser = await User.findById(req.user.id);
@@ -119,4 +127,5 @@ module.exports = {
   follow,
   unfollow,
   showFollowers,
+  getUsers,
 };
