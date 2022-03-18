@@ -15,9 +15,9 @@ async function store(req, res) {
     const newUserUsername = await User.findOne({ username: newUser.username });
 
     if (newUserMail) {
-      res.status(401).json("This email is already in use.");
+      res.json("This email is already in use.");
     } else if (newUserUsername) {
-      res.status(401).json("This username is already in use.");
+      res.json("This username is already in use.");
     } else {
       const savedUser = await newUser.save();
       res.json(savedUser);
