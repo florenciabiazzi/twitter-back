@@ -5,17 +5,23 @@ const { use } = require("../routes/apiRoutes");
 async function store(req, res) {
   const tweet = String(req.body.content);
   const newTweet = await new Tweet({
-    author: "6230ea8b4351d2d7ae728154", //vamos a cambiar por req.user.id cuando funcione el login
+    author: req.user.id,
     content: tweet,
     likes: [],
   });
   await newTweet.save();
+  await User.findByIdAndUpdate(req.user.id, { $push: { tweets: newTweet.id } });
   res.status(200).send("Tweet creado con éxito");
 }
 
 async function destroy(req, res) {
-  await Tweet.findByIdAndDelete(req.params.id);
-  res.status(200).json("Tweet borrado con éxito");
+  const user = User.findById(req.user.id);
+  if (user.tweets.includes(req.params.id)) {
+    await Tweet.findByIdAndDelete(req.params.id);
+    res.status(200).json("Tweet borrado con éxito");
+  } else {
+    res.status(401).json("Este tweet no es tuyo");
+  }
 }
 
 async function like(req, res) {
