@@ -51,13 +51,15 @@ async function dislike(req, res) {
 async function show(req, res) {
   const user = await User.findOne({ username: req.params.username });
   if (!user) return res.status(404).json("No existe el usuario");
-  const tweets = await Tweet.find({ author: user.id }).populate("author");
+  const tweets = await Tweet.find({ author: user.id }).sort({ createdAt: -1 }).populate("author");
   res.status(200).json({ tweets });
 }
 // ...
 async function getTweetsOfFollowing(req, res) {
   const user = await User.findById(req.params.id);
-  const tweets = await Tweet.find({ author: { $in: user.following } }).populate("author");
+  const tweets = await Tweet.find({ author: { $in: user.following } })
+    .sort({ createdAt: -1 })
+    .populate("author");
   console.log(user);
   res.json({ tweets });
 }
