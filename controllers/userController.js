@@ -82,7 +82,6 @@ async function follow(req, res) {
   } else {
     await User.findByIdAndUpdate(req.user.id, { $push: { following: req.params.id } });
     await User.findByIdAndUpdate(req.params.id, { $push: { followers: req.user.id } });
-    console.log(req.user.id);
     return res.json(userToFollow);
   }
 }
@@ -95,7 +94,7 @@ async function unfollow(req, res) {
   if (myUser.following.includes(req.params.id)) {
     await User.findByIdAndUpdate(req.user.id, { $pull: { following: req.params.id } });
     await User.findByIdAndUpdate(req.params.id, { $pull: { followers: req.user.id } });
-    console.log(req.user.id);
+
     return res.json(userToFollow);
   } else {
     return res.json("no lo sigues");

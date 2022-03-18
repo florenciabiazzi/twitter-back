@@ -60,7 +60,7 @@ async function getTweetsOfFollowing(req, res) {
   const tweets = await Tweet.find({ author: { $in: user.following } })
     .sort({ createdAt: -1 })
     .populate("author");
-  console.log(user);
+
   res.json({ tweets });
 }
 module.exports = {
