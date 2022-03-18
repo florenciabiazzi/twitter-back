@@ -8,10 +8,10 @@ async function store(req, res) {
     author: req.user.id,
     content: tweet,
     likes: [],
-  });
+  }).populate("author");
   await newTweet.save();
   await User.findByIdAndUpdate(req.user.id, { $push: { tweets: newTweet.id } });
-  res.status(200).send("Tweet creado con éxito");
+  res.status(200).json({ newTweet });
 }
 
 async function destroy(req, res) {
