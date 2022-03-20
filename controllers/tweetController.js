@@ -57,7 +57,7 @@ async function show(req, res) {
 // ...
 async function getTweetsOfFollowing(req, res) {
   const user = await User.findById(req.params.id);
-  const tweets = await Tweet.find({ author: { $in: user.following } })
+  const tweets = await Tweet.find({ author: { $in: [...user.following, req.user.id] } })
     .sort({ createdAt: -1 })
     .populate("author");
 
