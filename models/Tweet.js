@@ -10,5 +10,6 @@ const tweetSchema = new Schema(
   },
   { timestamps: true },
 );
+tweetSchema.set("toJSON", { virtuals: true });
 const Tweet = mongoose.model("Tweet", tweetSchema);
 module.exports = Tweet;

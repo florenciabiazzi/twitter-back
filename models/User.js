@@ -32,6 +32,7 @@ userSchema.methods.toJSON = function () {
   delete user.password;
   return user;
 };
+userSchema.set("toJSON", { virtuals: true });
 
 const User = mongoose.model("User", userSchema);
 
