@@ -1,6 +1,7 @@
 const Tweet = require("../models/Tweet");
 const User = require("../models/User");
 const { faker } = require("@faker-js/faker");
+const _ = require("lodash");
 
 faker.locale = "es";
 
@@ -12,7 +13,9 @@ module.exports = async () => {
   for (let i = 1; i < 100; i++) {
     const random = Math.floor(Math.random() * (19 - 1) + 1);
     const user = await User.findOne().skip(random);
-    const tweet = new Tweet({ content: faker.lorem.sentence(20), author: user });
+    const users = await User.find();
+    const likes = _.sampleSize(users, Math.floor(Math.random() * 16));
+    const tweet = new Tweet({ content: faker.lorem.sentence(20), author: user, likes: likes });
     user.tweets.push(tweet);
     user.save();
     tweets.push(tweet);

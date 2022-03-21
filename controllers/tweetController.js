@@ -4,6 +4,9 @@ const { use } = require("../routes/apiRoutes");
 
 async function store(req, res) {
   const tweet = String(req.body.content);
+  const user = await User.findById(req.user.id);
+  if (!user) return res.status(401).json("Lo sentimos, el usuario no existe");
+
   const newTweet = await new Tweet({
     author: req.user.id,
     content: tweet,
@@ -16,6 +19,7 @@ async function store(req, res) {
 
 async function destroy(req, res) {
   const user = User.findById(req.user.id);
+  if (!user) return res.status(401).json("Lo sentimos, el usuario no existe");
   if (user.tweets.includes(req.params.id)) {
     await Tweet.findByIdAndDelete(req.params.id);
     res.status(200).json("Tweet borrado con éxito");
@@ -27,6 +31,7 @@ async function destroy(req, res) {
 async function like(req, res) {
   const user = req.user.id;
   const id = req.params.id;
+  if (!user) return res.status(401).json("Lo sentimos, el usuario no existe");
   const tweet = await Tweet.findById(id);
   if (!tweet.likes.includes(user)) {
     await Tweet.findByIdAndUpdate(id, { $push: { likes: user } });
@@ -39,6 +44,7 @@ async function like(req, res) {
 async function dislike(req, res) {
   const user = req.user.id;
   const id = req.params.id;
+  if (!user) return res.status(401).json("Lo sentimos, el usuario no existe");
   const tweet = await Tweet.findById(id);
   if (tweet.likes.includes(user)) {
     await Tweet.findByIdAndUpdate(id, { $pull: { likes: user } });
@@ -47,16 +53,17 @@ async function dislike(req, res) {
     res.status(401).json("Nunca dio like");
   }
 }
-// Otros handlers...
+
 async function show(req, res) {
   const user = await User.findOne({ username: req.params.username });
   if (!user) return res.status(204).json("No existe el usuario");
   const tweets = await Tweet.find({ author: user.id }).sort({ createdAt: -1 }).populate("author");
   res.status(200).json({ tweets });
 }
-// ...
+
 async function getTweetsOfFollowing(req, res) {
   const user = await User.findById(req.params.id);
+  if (!user) return res.status(401).json("Lo sentimos, el usuario no existe");
   const tweets = await Tweet.find({ author: { $in: [...user.following, req.user.id] } })
     .sort({ createdAt: -1 })
     .populate("author");

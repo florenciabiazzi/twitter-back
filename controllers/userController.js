@@ -27,7 +27,6 @@ async function store(req, res) {
   }
 }
 
-// Display the specified resource.
 async function getUser(req, res) {
   const user = await User.findOne({ username: req.params.username }).populate("tweets");
   if (!user) res.status(204).json("No existe el usuario");
@@ -36,19 +35,6 @@ async function getUser(req, res) {
   }
 }
 
-// Show the form for creating a new resource
-async function create(req, res) {}
-
-// Show the form for editing the specified resource.
-async function edit(req, res) {}
-
-// Update the specified resource in storage.
-async function update(req, res) {}
-
-// Remove the specified resource from storage.
-async function destroy(req, res) {}
-
-// Otros handlers...............................
 async function getUsers(req, res) {
   const users = await User.find();
   if (users) {
@@ -60,6 +46,7 @@ async function getUsers(req, res) {
 
 async function showFollowing(req, res) {
   const myUser = await User.findById(req.params.id);
+  if (!myUser) return res.status(401).json("Lo sentimos, el usuario no existe");
   const allUsers = await User.find();
   const followed = [];
   allUsers.filter((d) => {
@@ -72,8 +59,9 @@ async function showFollowing(req, res) {
 
 async function follow(req, res) {
   const myUser = await User.findById(req.user.id);
-
+  if (!myUser) return res.status(401).json("Lo sentimos, el usuario no existe");
   const userToFollow = await User.findById(req.params.id);
+  if (!userToFollow) return res.status(401).json("Lo sentimos, el usuario no existe");
 
   if (myUser.following.includes(req.params.id)) {
     return res.json("ya lo sigues");
@@ -88,8 +76,9 @@ async function follow(req, res) {
 
 async function unfollow(req, res) {
   const myUser = await User.findById(req.user.id);
-
+  if (!myUser) return res.status(401).json("Lo sentimos, el usuario no existe");
   const userToFollow = await User.findById(req.params.id);
+  if (!userToFollow) return res.status(401).json("Lo sentimos, el usuario no existe");
 
   if (myUser.following.includes(req.params.id)) {
     await User.findByIdAndUpdate(req.user.id, { $pull: { following: req.params.id } });
@@ -103,6 +92,7 @@ async function unfollow(req, res) {
 
 async function showFollowers(req, res) {
   const myUser = await User.findById(req.params.id);
+  if (!myUser) return res.status(401).json("Lo sentimos, el usuario no existe");
   const allUsers = await User.find();
   const followers = [];
   allUsers.filter((d) => {
