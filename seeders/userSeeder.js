@@ -14,10 +14,11 @@ module.exports = async () => {
       firstname: faker.name.firstName(),
       lastname: faker.name.lastName(),
       username: faker.internet.userName(),
-      password: "1234",
+      password: "user",
       email: faker.internet.email(),
       description: faker.lorem.paragraph(),
       profileImage: faker.image.avatar(),
+      following: [],
     });
     users.push(user);
   }
@@ -25,19 +26,26 @@ module.exports = async () => {
   await User.create(users);
 
   const usersToUpdate = await User.find();
+
   for (const user of usersToUpdate) {
     const randomUsers = _.sampleSize(usersToUpdate, 10).filter(
       (randomUser) => randomUser.id !== user.id,
     );
+
     const randomNumber = Math.floor(Math.random() * 10);
 
     await User.updateOne(user, {
       username: `${user.firstname}.${user.lastname}.${randomNumber}`,
       email: `${user.firstname}@${user.lastname}.${randomNumber}`,
       followers: randomUsers,
-      following: randomUsers,
     });
+
+    for (const follower of randomUsers) {
+      follower.following = [...follower.following, user.id];
+      await follower.save();
+    }
   }
+  await User.updateOne({ id: usersToUpdate[0].id }, { username: "user" });
 
   console.log("[Database] Se corrió el seeder de Users.");
 };
