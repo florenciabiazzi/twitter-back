@@ -18,8 +18,10 @@ async function store(req, res) {
 }
 
 async function destroy(req, res) {
-  const user = User.findById(req.user.id);
+  const user = await User.findById(req.user.id);
+
   if (!user) return res.status(401).json("Lo sentimos, el usuario no existe");
+
   if (user.tweets.includes(req.params.id)) {
     await Tweet.findByIdAndDelete(req.params.id);
     res.status(200).json("Tweet borrado con éxito");
