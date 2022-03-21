@@ -10,20 +10,17 @@ async function store(req, res) {
     password: req.body.password,
     profileImage: "../img/unknown.jpg",
   });
-  try {
-    const newUserMail = await User.findOne({ email: newUser.email });
-    const newUserUsername = await User.findOne({ username: newUser.username });
 
-    if (newUserMail) {
-      res.json("This email is already in use.");
-    } else if (newUserUsername) {
-      res.json("This username is already in use.");
-    } else {
-      const savedUser = await newUser.save();
-      res.json(savedUser);
-    }
-  } catch (err) {
-    res.status(404); //revisar y cambiar status
+  const newUserMail = await User.findOne({ email: newUser.email });
+  const newUserUsername = await User.findOne({ username: newUser.username });
+
+  if (newUserMail) {
+    res.json("This email is already in use.");
+  } else if (newUserUsername) {
+    res.json("This username is already in use.");
+  } else {
+    const savedUser = await newUser.save();
+    res.json(savedUser);
   }
 }
 
