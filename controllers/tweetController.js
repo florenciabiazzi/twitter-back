@@ -50,7 +50,7 @@ async function dislike(req, res) {
 // Otros handlers...
 async function show(req, res) {
   const user = await User.findOne({ username: req.params.username });
-  if (!user) return res.status(404).json("No existe el usuario");
+  if (!user) return res.status(204).json("No existe el usuario");
   const tweets = await Tweet.find({ author: user.id }).sort({ createdAt: -1 }).populate("author");
   res.status(200).json({ tweets });
 }

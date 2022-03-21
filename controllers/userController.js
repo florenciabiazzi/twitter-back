@@ -30,7 +30,7 @@ async function store(req, res) {
 // Display the specified resource.
 async function getUser(req, res) {
   const user = await User.findOne({ username: req.params.username }).populate("tweets");
-  if (!user) res.status(404).json("No existe el usuario");
+  if (!user) res.status(204).json("No existe el usuario");
   else {
     res.json(user);
   }
