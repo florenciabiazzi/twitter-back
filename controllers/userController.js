@@ -8,7 +8,7 @@ async function store(req, res) {
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
-    profileImage: "../img/unknown.jpg",
+    profileImage: "../img/unknown.png",
   });
 
   const newUserMail = await User.findOne({ email: newUser.email });

@@ -45,7 +45,17 @@ module.exports = async () => {
       await follower.save();
     }
   }
-  await User.updateOne({ id: usersToUpdate[0].id }, { username: "user" });
+  await User.updateOne(
+    { id: usersToUpdate[0].id },
+    {
+      username: "user",
+      profileImage:
+        "https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png",
+      firstname: "User",
+      lastname: "Demo",
+      email: "user@user",
+    },
+  );
 
   console.log("[Database] Se corrió el seeder de Users.");
 };
