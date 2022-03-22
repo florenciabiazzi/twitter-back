@@ -24,7 +24,6 @@ async function destroy(req, res) {
 
   if (user.tweets.includes(req.params.id)) {
     await Tweet.findByIdAndDelete(req.params.id);
-    console.log(req.user.id, "user", user, "tweet", tweet);
     await User.findByIdAndUpdate(req.user.id, { $pull: { tweets: tweet.id } });
     res.status(200).json("Tweet borrado con éxito");
   } else {
