@@ -19,11 +19,13 @@ async function store(req, res) {
 
 async function destroy(req, res) {
   const user = await User.findById(req.user.id);
-
+  const tweet = await Tweet.findById(req.params.id);
   if (!user) return res.status(401).json("Lo sentimos, el usuario no existe");
 
   if (user.tweets.includes(req.params.id)) {
     await Tweet.findByIdAndDelete(req.params.id);
+    console.log(req.user.id, "user", user, "tweet", tweet);
+    await User.findByIdAndUpdate(req.user.id, { $pull: { tweets: tweet.id } });
     res.status(200).json("Tweet borrado con éxito");
   } else {
     res.status(401).json("Este tweet no es tuyo");
